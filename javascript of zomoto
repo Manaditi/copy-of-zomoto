@@ -1,0 +1,54 @@
+// ---------- Header shrinks + gets a shadow on scroll ----------
+const header = document.querySelector("header");
+
+window.addEventListener("scroll", () => {
+    if (window.scrollY > 12) {
+        header.classList.add("scrolled");
+    } else {
+        header.classList.remove("scrolled");
+    }
+});
+
+// ---------- Rotating placeholder text in the search bar ----------
+const searchInput = document.querySelector("main input");
+
+const placeholders = [
+    "Search for restaurant, cuisine or a dish",
+    "Try \"biryani near me\"",
+    "Craving pizza tonight?",
+    "Search for a cafe with rooftop seating"
+];
+
+let placeholderIndex = 0;
+
+function rotatePlaceholder() {
+    // don't interrupt the user while they're typing or focused
+    if (document.activeElement === searchInput) return;
+    placeholderIndex = (placeholderIndex + 1) % placeholders.length;
+    searchInput.setAttribute("placeholder", placeholders[placeholderIndex]);
+}
+
+setInterval(rotatePlaceholder, 3200);
+
+// ---------- Pressing Enter in the search bar gives quick feedback ----------
+searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && searchInput.value.trim().length > 0) {
+        searchInput.style.transition = "transform 0.15s ease";
+        searchInput.style.transform = "scale(0.98)";
+        setTimeout(() => {
+            searchInput.style.transform = "scale(1)";
+        }, 150);
+    }
+});
+
+// ---------- Nav links: quick scale feedback on click ----------
+document.querySelectorAll("header ul li a").forEach((link) => {
+    link.addEventListener("click", (e) => {
+        e.preventDefault(); // placeholder links (href="") in this demo
+        link.style.transition = "transform 0.12s ease";
+        link.style.transform = "scale(0.94)";
+        setTimeout(() => {
+            link.style.transform = "scale(1)";
+        }, 120);
+    });
+});
